@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expense tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form onsubmit="saveinlocalstorage(event)"><label for="expense">expense</label>
+   <input type="number" name="number" id="expense" required>
+   <label for="category"> expense category(type)</label>
+   <input type="text" name="category" id="category" required>
+<label for="selectday">select day</label>
+<select name="select" id="select" required>
+   <option>monday</option>
+   <option>tuesday</option>
+   <option>wednesday</option>
+   <option>thursday</option>
+   <option>friday</option>
+   <option>saturday</option>
+</select>
+<input type="submit" id="submit">
+</form>
+   <ul id="list">
+    
+   </ul>
+        
+
+
+<script>
+function saveinlocalstorage(event)
+{
+    event.preventDefault();
+    const expense=event.target.expense.value
+const day=event.target.select.value
+const category=event.target.category.value
+const myobj={
+    expense,
+    day,
+    category
+}
+localStorage.setItem("userdetails",JSON.stringify(myobj))
+detailonscreen(myobj)
+}
+function detailonscreen(myobj)
+{
+    const parent=document.getElementById('list')
+    const child=document.createElement('li')
+    child.style.backgroundColor="red"
+    child.textContent=myobj.day+" -- "+myobj.expense+"(Rupees)"+" -- "+myobj.category;
+    parent.appendChild(child)
+
+const deletebtn=document.createElement("input")
+deletebtn.type="button"
+deletebtn.value="delete"
+deletebtn.onclick=()=>
+{
+    localStorage.removeItem(myobj.expense)
+    parent.removeChild(child)
+}
+
+const editbtn=document.createElement('input')
+editbtn.type='button'
+editbtn.value='edit'
+editbtn.onclick=()=>
+{
+localStorage.removeItem(myobj.expense)
+parent.removeChild(child)
+document.getElementById("expense").value=myobj.expense
+document.getElementById("day").value=myobj.day
+document.getElementById("category").value=myobj.category
+}
+child.appendChild(deletebtn)
+child.appendChild(editbtn)
+}
+</script>
+</body>
+</html>
